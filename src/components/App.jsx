@@ -7,6 +7,7 @@ import { ContactForm } from './contactForm';
 import { Filter } from './filter';
 import { ContactList } from './contactList';
 
+const CONTACTS = 'contacts';
 const initialContacts = [
   // { id: nanoid(), name: 'Rosie Simpson', number: '459-12-56' },
   // { id: nanoid(), name: 'Hermione Kline', number: '443-89-12' },
@@ -59,6 +60,20 @@ export class App extends Component {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(contact => contact.id !== contactId),
     }));
+  };
+
+  componentDidMount() {
+    const localStorageContacts = JSON.parse(localStorage.getItem(CONTACTS));
+
+    if (localStorageContacts) {
+      this.setState({ contacts: localStorageContacts });
+    };
+  };
+
+  componentDidUpdate( prevProps, prevState) { 
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem(CONTACTS, JSON.stringify(this.state.contacts))
+    }
   };
 
   render() {
